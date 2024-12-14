@@ -9,8 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @ToString
-@Table(name = "workspaces")
-public class Workspace {
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +18,10 @@ public class Workspace {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "id_author")
-    private Account author;
+    @ManyToMany
+    private List<Account> accounts;
 
+    @ManyToOne
+    @JoinColumn(name = "id_workspace")
+    private Workspace workspace;
 }
