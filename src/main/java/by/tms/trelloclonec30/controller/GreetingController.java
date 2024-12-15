@@ -1,3 +1,4 @@
+/*
 package by.tms.trelloclonec30.controller;
 
 import org.springframework.http.ResponseEntity;
@@ -15,5 +16,7 @@ public class GreetingController {
     public ResponseEntity<String> greeting(@RequestParam("name") String name) {
         String message = "Hello %s".formatted(name);
         return ResponseEntity.ok(message);
+        //dsuhflsdbflisbdlfb
     }
 }
+*/
