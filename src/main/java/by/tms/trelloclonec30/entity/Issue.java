@@ -24,6 +24,6 @@ public class Issue {
     @ManyToOne
     @JoinColumn(name = "id_project")
     private Project project;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Status currentStatus;
 }
