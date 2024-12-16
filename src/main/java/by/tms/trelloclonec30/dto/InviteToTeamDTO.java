@@ -7,8 +7,7 @@ import java.util.List;
 
 @Data
 @ToString
-public class TeamDto {
-    private Long id;
-    private String teamName;
-    private List<String> members;
+public class InviteToTeamDTO {
+    private String AccountName;
+    private Long idTeam;
 }
