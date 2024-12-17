@@ -6,7 +6,7 @@ import by.tms.trelloclonec30.entity.Status;
 import lombok.Data;
 
 @Data
-public class IssueRequestDto {
+public class IssueCreateDto {
     private String title;
     private String description;
     private Account author;
@@ -19,9 +19,9 @@ public class IssueRequestDto {
         return "IssueRequestDto{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", currentStatus='" + currentStatus + '\'' +
                 ", author='" + author + '\'' +
                 ", assignee='" + assignee + '\'' +
-                ", project='" + project + '\'' +
-                ", currentStatus='" + currentStatus + '\'' + '}';
+                ", project='" + project + '\'' + '}';
     }
 }
