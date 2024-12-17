@@ -1,5 +1,6 @@
 package by.tms.trelloclonec30.controller;
 
+import by.tms.trelloclonec30.dto.IssueRequestDto;
 import by.tms.trelloclonec30.entity.Issue;
 import by.tms.trelloclonec30.service.IssueService;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,9 @@ public class IssueController {
         this.issueService = issueService;
     }
 
-    @PostMapping
-    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue) {
-        var saved = issueService.create(issue);
+    @PostMapping("/create")
+    public ResponseEntity<IssueRequestDto> createIssue(@RequestBody IssueRequestDto issueRequestDto) {
+        var saved = issueService.create(issueRequestDto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 }

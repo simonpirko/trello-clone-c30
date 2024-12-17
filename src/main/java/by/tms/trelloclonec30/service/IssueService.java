@@ -1,12 +1,8 @@
 package by.tms.trelloclonec30.service;
 
+import by.tms.trelloclonec30.dto.IssueRequestDto;
 import by.tms.trelloclonec30.entity.Issue;
 import by.tms.trelloclonec30.repository.IssueRepository;
-//import org.springframework.security.core.userdetails.User;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 //import java.util.Optional;
@@ -19,9 +15,14 @@ public class IssueService /*implements UserDetailsService*/ {
         this.issueRepository = issueRepository;
     }
 
-    public Issue create(Issue issue) {
+    public IssueRequestDto create(IssueRequestDto issueRequestDto) {
+
+        Issue issue = new Issue();
+        issue.setTitle(issueRequestDto.getTitle());
+        issue.setDescription(issueRequestDto.getDescription());
+
         issueRepository.save(issue);
-        return issue;
+        return issueRequestDto;
     }
 
 //    @Override
