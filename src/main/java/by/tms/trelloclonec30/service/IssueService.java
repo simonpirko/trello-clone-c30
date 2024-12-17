@@ -18,7 +18,11 @@ public class IssueService {
         Issue issue = new Issue();
         issue.setTitle(issueCreateDto.getTitle());
         issue.setDescription(issueCreateDto.getDescription());
-        issue.setCurrentStatus(Status.STATUS_BACKLOG);
+        issue.setCurrentStatus(Status.STATUS_IN_PROGRESS);
+
+//        issue.setAuthor().setId(issueCreateDto.getIdAssignee());
+//        issue.getAuthor(issueCreateDto.getIdAuthor());
+//        issue.getProject(issueCreateDto.getIdProject());
 
         issueRepository.save(issue);
         return issueCreateDto;
