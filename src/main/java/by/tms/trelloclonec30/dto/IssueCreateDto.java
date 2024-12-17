@@ -15,11 +15,11 @@ public class IssueCreateDto {
     @Override
     public String toString() {
         return "IssueRequestDto{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", currentStatus='" + currentStatus + '\'' +
-                ", idAuthor='" + idAuthor + '\'' +
-                ", idAssignee='" + idAssignee + '\'' +
-                ", idProject='" + idProject + '\'' + '}';
+                "title='" + title + "', " +
+                "description='" + description + "', " +
+                "currentStatus='" + currentStatus + "', " +
+                "idAuthor='" + idAuthor + "', " +
+                "idAssignee='" + idAssignee + "', " +
+                "idProject='" + idProject +  "'}";
     }
 }
