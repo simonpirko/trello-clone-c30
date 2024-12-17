@@ -1,9 +1,10 @@
 package by.tms.trelloclonec30.service;
 
-import by.tms.trelloclonec30.dto.IssueCreateDto;
+import by.tms.trelloclonec30.dto.issue.IssueCreateDto;
+import by.tms.trelloclonec30.dto.issue.IssueDeleteByIssueDto;
+import by.tms.trelloclonec30.dto.issue.IssueShowDto;
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Issue;
-import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.repository.AccountRepository;
 import by.tms.trelloclonec30.repository.IssueRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,4 +48,26 @@ public class IssueService {
         issueRepository.save(issue);
         return issueCreateDto;
     }
+
+
+
+    public Issue show(IssueShowDto issueShowDto) {
+        Issue issue = new Issue();
+        Optional<Issue> issueOpt = issueRepository.findById(Long.valueOf(issueShowDto.getId()));
+        if (issueOpt.isPresent()) {
+            return issueOpt.get();
+        } else {
+            throw new EntityNotFoundException("Issue not found");
+        }
+    }
+
+    public IssueDeleteByIssueDto deleteByIssue(IssueDeleteByIssueDto issueDeleteByIssueDto) {
+        issueRepository.deleteById(Long.valueOf(issueDeleteByIssueDto.getId()));
+        return issueDeleteByIssueDto;
+    }
+// todo
+//    public IssueDeleteByProjectDto deleteByIssue(IssueDeleteByProjectDto issueDeleteByProjectDto) {
+//        issueRepository.deleteById(Long.valueOf(issueDeleteByProjectDto.getId()));
+//        return IssueDeleteByProjectDto;
+//    }
 }

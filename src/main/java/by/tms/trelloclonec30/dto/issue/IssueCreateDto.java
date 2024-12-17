@@ -1,4 +1,4 @@
-package by.tms.trelloclonec30.dto;
+package by.tms.trelloclonec30.dto.issue;
 
 import by.tms.trelloclonec30.entity.Status;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class IssueCreateDto {
 
     @Override
     public String toString() {
-        return "IssueRequestDto{" +
+        return "IssueCreateDto{" +
                 "title='" + title + "', " +
                 "description='" + description + "', " +
                 "currentStatus='" + currentStatus + "', " +
