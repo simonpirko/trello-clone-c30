@@ -21,8 +21,14 @@ public class IssueController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<IssueCreateDto> createIssue(@RequestBody IssueCreateDto issueCreateDto) {
+    public ResponseEntity<IssueCreateDto> create(@RequestBody IssueCreateDto issueCreateDto) {
         var saved = issueService.create(issueCreateDto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
+//    @PostMapping("/delete")
+//    public ResponseEntity<IssueCreateDto> delete() {
+////        var saved = issueService.create(issueCreateDto);
+//        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+//    }
 }
