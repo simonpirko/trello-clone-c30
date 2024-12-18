@@ -27,6 +27,11 @@ public class AccountService implements UserDetailsService {
         return account;
     }
 
+    public Account checkAccount(String username) {
+        Optional<Account> account = accountRepository.findByUsername(username);
+        return account.orElse(null);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Account> account = accountRepository.findByUsername(username);

@@ -27,8 +27,8 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.createProject(projectCreateDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/show")
-    public ResponseEntity<?> getAllProjects(@RequestParam Long workspaceId) {
+    @GetMapping("/show/{workspaceId}")
+    public ResponseEntity<?> getAllProjects(@PathVariable("workspaceId") Long workspaceId) {
         List<ProjectResponseDto> projects = projectService.getAllProjectsByWorkspace(workspaceId);
         if (projects.isEmpty()) {
             MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Project not found");
