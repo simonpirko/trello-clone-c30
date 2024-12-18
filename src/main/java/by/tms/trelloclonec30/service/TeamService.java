@@ -32,9 +32,10 @@ public class TeamService {
         Workspace workspace = workspaceRepository.findById(teamCreateDTO.getIdWorkspace()).get();
         team.setName(teamCreateDTO.getTeamName());
         team.setWorkspace(workspace);
-       team = teamRepository.save(team);
-       TeamDto teamDto = convertTeamToTeamDto(team);
-return teamDto;
+        team = teamRepository.save(team);
+        TeamDto teamDto = convertTeamToTeamDto(team);
+        return teamDto;
+      
     }
 
     public List<TeamDto> getAllTeams(Long workspaceId) {
@@ -45,12 +46,13 @@ return teamDto;
         }
         return teamDtos;
     }
+  
     private TeamDto convertTeamToTeamDto(Team team) {
         TeamDto teamDto = new TeamDto();
         teamDto.setTeamName(team.getName());
         teamDto.setId(team.getId());
         List<String> members = new ArrayList<>();
-        if(team.getAccounts() != null) {
+        if (team.getAccounts() != null) {
             for (Account account : team.getAccounts()) {
                 members.add(account.getUsername());
             }
@@ -58,7 +60,8 @@ return teamDto;
         teamDto.setMembers(members);
         return teamDto;
     }
-    public TeamDto invite (InviteToTeamDTO inviteToTeamDTO) {
+  
+    public TeamDto invite(InviteToTeamDTO inviteToTeamDTO) {
         Team team = teamRepository.findById(inviteToTeamDTO.getIdTeam()).get();
         Account account = accountRepository.findByUsername(inviteToTeamDTO.getAccountName()).get();
         team.getAccounts().add(account);
