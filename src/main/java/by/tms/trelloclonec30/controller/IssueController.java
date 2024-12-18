@@ -27,7 +27,7 @@ public class IssueController {
     }
 
     @PostMapping("/show")
-    public ResponseEntity<Issue> create(@RequestBody IssueShowDto issueShowDto) {
+    public ResponseEntity<IssueShowDto> create(@RequestBody IssueShowDto issueShowDto) {
         var show = issueService.show(issueShowDto);
         return new ResponseEntity<>(show, HttpStatus.OK);
     }

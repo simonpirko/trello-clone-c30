@@ -1,5 +1,6 @@
 package by.tms.trelloclonec30.service;
 
+import by.tms.trelloclonec30.dto.account.AccountShowDto;
 import by.tms.trelloclonec30.dto.issue.IssueCreateDto;
 import by.tms.trelloclonec30.dto.issue.IssueDeleteByIssueDto;
 import by.tms.trelloclonec30.dto.issue.IssueShowDto;
@@ -51,14 +52,27 @@ public class IssueService {
 
 
 
-    public Issue show(IssueShowDto issueShowDto) {
-        Issue issue = new Issue();
+    public IssueShowDto show(IssueShowDto issueShowDto) {
         Optional<Issue> issueOpt = issueRepository.findById(Long.valueOf(issueShowDto.getId()));
+        Issue issue = new Issue();
         if (issueOpt.isPresent()) {
-            return issueOpt.get();
+            issue =  issueOpt.get();
         } else {
             throw new EntityNotFoundException("Issue not found");
         }
+        issueShowDto.setTitle(issue.getTitle());
+        issueShowDto.setDescription(issue.getDescription());
+        AccountShowDto assignee = new AccountShowDto();
+        assignee.setId(issue.getAssignee().getId());
+        assignee.setUsername(issue.getAssignee().getUsername());
+        issueShowDto.setAssignee(assignee);
+        AccountShowDto author = new AccountShowDto();
+        author.setId(issue.getAuthor().getId());
+        author.setUsername(issue.getAuthor().getUsername());
+        issueShowDto.setAuthor(author);
+        issueShowDto.setProject(issue.getProject());
+        issueShowDto.setCurrentStatus(issue.getCurrentStatus());
+        return issueShowDto;
     }
 
     public IssueDeleteByIssueDto deleteByIssue(IssueDeleteByIssueDto issueDeleteByIssueDto) {
