@@ -1,7 +1,6 @@
 package by.tms.trelloclonec30.dto.issue;
 
 import by.tms.trelloclonec30.dto.account.AccountShowDto;
-//import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.entity.Status;
 import lombok.Data;

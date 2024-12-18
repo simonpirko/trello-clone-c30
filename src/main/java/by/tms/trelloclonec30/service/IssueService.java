@@ -40,17 +40,17 @@ public class IssueService {
         Optional<Account> assigneeOpt = accountRepository.findById(Long.valueOf(issueCreateDto.getIdAssignee()));
         if (assigneeOpt.isPresent()) {
             issue.setAssignee(assigneeOpt.get());
-        } else {
-            throw new EntityNotFoundException("Assignee not found");
         }
-
-//        issue.setProject();
-
+//        todo реализовать после мержа в мастер
+//        Optional<Project> projectOpt = projectRepository.findById(Long.valueOf(issueCreateDto.getIdProjectr()));
+//        if (projectOpt.isPresent()) {
+//            issue.setProject(projectOpt.get());
+//        } else {
+//            throw new EntityNotFoundException("Project not found");            }
+//        }
         issueRepository.save(issue);
         return issueCreateDto;
     }
-
-
 
     public IssueShowDto show(IssueShowDto issueShowDto) {
         Optional<Issue> issueOpt = issueRepository.findById(Long.valueOf(issueShowDto.getId()));
@@ -79,7 +79,7 @@ public class IssueService {
         issueRepository.deleteById(Long.valueOf(issueDeleteByIssueDto.getId()));
         return issueDeleteByIssueDto;
     }
-// todo
+// todo реализовать после мержа в мастер
 //    public IssueDeleteByProjectDto deleteByIssue(IssueDeleteByProjectDto issueDeleteByProjectDto) {
 //        issueRepository.deleteById(Long.valueOf(issueDeleteByProjectDto.getId()));
 //        return IssueDeleteByProjectDto;
