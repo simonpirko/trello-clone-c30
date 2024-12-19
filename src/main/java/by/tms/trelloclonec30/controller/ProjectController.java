@@ -37,7 +37,7 @@ public class ProjectController {
 
     @GetMapping("/{projectId}")
     public ResponseEntity<?> getIssuesByProjects(@PathVariable("projectId") Long projectId) {
-        Optional<ProjectIssuesDto> projectIssuesOpt = projectService.getIssuesByProjects(projectId);
+        Optional<ProjectIssuesDto> projectIssuesOpt = projectService.getIssuesByProject(projectId);
         if (projectIssuesOpt.isEmpty()) {
             MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Project not found");
             return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);

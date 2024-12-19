@@ -1,5 +1,6 @@
 package by.tms.trelloclonec30.service;
 
+import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
@@ -16,11 +17,18 @@ import java.util.Optional;
 
 @Service
 public class ProjectService {
+    private final ProjectRepository projectRepository;
+    private final WorkspaceRepository workspaceRepository;
+    private final IssueService issueService;
 
     @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private WorkspaceRepository workspaceRepository;
+    public ProjectService(ProjectRepository projectRepository,
+                          WorkspaceRepository workspaceRepository,
+                          IssueService issueService) {
+        this.projectRepository = projectRepository;
+        this.workspaceRepository = workspaceRepository;
+        this.issueService = issueService;
+    }
 
     public List<ProjectResponseDto> getAllProjectsByWorkspace(Long workspaceId) {
         List<Project> projects = projectRepository.findAllByWorkspaceId(workspaceId);
@@ -51,17 +59,19 @@ public class ProjectService {
         return projectResponseDto;
     }
 
-    public Optional<ProjectIssuesDto> getProjectById(Long projectId) {
+    public Optional<ProjectIssuesDto> getIssuesByProject(Long projectId) {
         Optional<Project> projectOpt = projectRepository.findById(projectId);
+        Project project;
         if (projectOpt.isPresent()) {
-            Project project = projectOpt.get();
+            project = projectOpt.get();
         } else {
             return Optional.empty();
         }
-
-
         ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
-
-        return projectIssuesDto;
+        projectIssuesDto.setId(project.getId());
+        projectIssuesDto.setName(project.getName());
+        projectIssuesDto.setDescription(project.getDescription());
+        projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
+        return Optional.of(projectIssuesDto);
     }
 }
