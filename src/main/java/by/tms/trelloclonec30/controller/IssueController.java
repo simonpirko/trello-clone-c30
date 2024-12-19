@@ -30,24 +30,17 @@ public class IssueController {
 
     @GetMapping("/{issueId}")
     public ResponseEntity<?> show(@PathVariable("issueId") Long issueId) {
-        Optional<IssueShowDto> showOpt = issueService.show(issueId);  // todo поменять с обработкой Optional
+        Optional<IssueShowDto> showOpt = issueService.show(issueId);
         if (showOpt.isEmpty()) {
             MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Issue not found");
             return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(showOpt.get(), HttpStatus.OK);
     }
-//
-//    @DeleteMapping("/by-issue")
-//    public ResponseEntity<IssueDeleteByIssueDto> delete(@RequestBody IssueDeleteByIssueDto issueDeleteByIssueDto) {
-//        var deleted = issueService.deleteByIssue(issueDeleteByIssueDto);
-//        return new ResponseEntity<>(deleted, HttpStatus.OK);
-//    }
 
-//  todo
-//    @DeleteMapping("/by-project")
-//    public ResponseEntity<IssueDeleteByProjectDto> delete(@RequestBody IssueDeleteByProjectDto issueDeleteByProjectDto) {
-//        var deleted = issueService.deleteByIssue(issueDeleteByProjectDto);
-//        return new ResponseEntity<>(deleted, HttpStatus.ACCEPTED);
-//    }
+    @DeleteMapping("/{issueId}")
+    public ResponseEntity<?> delete(@PathVariable Long issueId) {
+        issueService.deleteById(issueId);
+        return new ResponseEntity<>("Issue deleted", HttpStatus.OK);
+    }
 }

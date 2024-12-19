@@ -77,10 +77,10 @@ public class IssueService {
         return Optional.of(issueShowDto);
     }
 
-    public IssueDeleteByIssueDto deleteByIssue(IssueDeleteByIssueDto issueDeleteByIssueDto) {
-        issueRepository.deleteById(Long.valueOf(issueDeleteByIssueDto.getId()));
-        return issueDeleteByIssueDto;
+    public void deleteById(Long issueId) {
+        issueRepository.deleteById(issueId);
     }
+
 // todo реализовать после мержа в мастер
 //    public IssueDeleteByProjectDto deleteByIssue(IssueDeleteByProjectDto issueDeleteByProjectDto) {
 //        issueRepository.deleteById(Long.valueOf(issueDeleteByProjectDto.getId()));
