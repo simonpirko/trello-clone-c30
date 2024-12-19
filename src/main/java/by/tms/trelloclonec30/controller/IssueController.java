@@ -2,7 +2,6 @@ package by.tms.trelloclonec30.controller;
 
 import by.tms.trelloclonec30.dto.MessageErrorDto;
 import by.tms.trelloclonec30.dto.issue.IssueCreateDto;
-import by.tms.trelloclonec30.dto.issue.IssueDeleteByIssueDto;
 import by.tms.trelloclonec30.dto.issue.IssueShowDto;
 import by.tms.trelloclonec30.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;

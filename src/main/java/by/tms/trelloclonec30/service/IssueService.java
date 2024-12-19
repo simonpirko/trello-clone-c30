@@ -2,12 +2,13 @@ package by.tms.trelloclonec30.service;
 
 import by.tms.trelloclonec30.dto.account.AccountShowDto;
 import by.tms.trelloclonec30.dto.issue.IssueCreateDto;
-import by.tms.trelloclonec30.dto.issue.IssueDeleteByIssueDto;
 import by.tms.trelloclonec30.dto.issue.IssueShowDto;
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Issue;
+import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.repository.AccountRepository;
 import by.tms.trelloclonec30.repository.IssueRepository;
+import by.tms.trelloclonec30.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,15 @@ import java.util.Optional;
 public class IssueService {
     private final IssueRepository issueRepository;
     private final AccountRepository accountRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
     public IssueService(IssueRepository issueRepository,
-                        AccountRepository accountRepository) {
+                        AccountRepository accountRepository,
+                        ProjectRepository projectRepository) {
         this.issueRepository = issueRepository;
         this.accountRepository = accountRepository;
+        this.projectRepository = projectRepository;
     }
 
     public IssueCreateDto create(IssueCreateDto issueCreateDto) {
@@ -41,13 +45,12 @@ public class IssueService {
         if (assigneeOpt.isPresent()) {
             issue.setAssignee(assigneeOpt.get());
         }
-//        todo реализовать после мержа в мастер
-//        Optional<Project> projectOpt = projectRepository.findById(Long.valueOf(issueCreateDto.getIdProjectr()));
-//        if (projectOpt.isPresent()) {
-//            issue.setProject(projectOpt.get());
-//        } else {
-//            throw new EntityNotFoundException("Project not found");            }
-//        }
+        Optional<Project> projectOpt = projectRepository.findById(Long.valueOf(issueCreateDto.getIdProject()));
+        if (projectOpt.isPresent()) {
+            issue.setProject(projectOpt.get());
+        } else {
+            throw new EntityNotFoundException("Project not found");
+        }
         issueRepository.save(issue);
         return issueCreateDto;
     }
@@ -80,10 +83,4 @@ public class IssueService {
     public void deleteById(Long issueId) {
         issueRepository.deleteById(issueId);
     }
-
-// todo реализовать после мержа в мастер
-//    public IssueDeleteByProjectDto deleteByIssue(IssueDeleteByProjectDto issueDeleteByProjectDto) {
-//        issueRepository.deleteById(Long.valueOf(issueDeleteByProjectDto.getId()));
-//        return IssueDeleteByProjectDto;
-//    }
 }
