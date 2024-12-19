@@ -19,23 +19,23 @@ public class IssueController {
         this.issueService = issueService;
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<IssueCreateDto> create(@RequestBody IssueCreateDto issueCreateDto) {
         var saved = issueService.create(issueCreateDto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PostMapping("/show")
-    public ResponseEntity<IssueShowDto> create(@RequestBody IssueShowDto issueShowDto) {
-        var show = issueService.show(issueShowDto);
-        return new ResponseEntity<>(show, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/by-issue")
-    public ResponseEntity<IssueDeleteByIssueDto> delete(@RequestBody IssueDeleteByIssueDto issueDeleteByIssueDto) {
-        var deleted = issueService.deleteByIssue(issueDeleteByIssueDto);
-        return new ResponseEntity<>(deleted, HttpStatus.OK);
-    }
+//    @PostMapping("/show")
+//    public ResponseEntity<IssueShowDto> create(@RequestBody IssueShowDto issueShowDto) {
+//        var show = issueService.show(issueShowDto);
+//        return new ResponseEntity<>(show, HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/by-issue")
+//    public ResponseEntity<IssueDeleteByIssueDto> delete(@RequestBody IssueDeleteByIssueDto issueDeleteByIssueDto) {
+//        var deleted = issueService.deleteByIssue(issueDeleteByIssueDto);
+//        return new ResponseEntity<>(deleted, HttpStatus.OK);
+//    }
 
 //  todo
 //    @DeleteMapping("/by-project")
