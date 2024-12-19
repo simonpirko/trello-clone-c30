@@ -52,14 +52,16 @@ public class IssueService {
         return issueCreateDto;
     }
 
-    public IssueShowDto show(IssueShowDto issueShowDto) {
-        Optional<Issue> issueOpt = issueRepository.findById(Long.valueOf(issueShowDto.getId()));
-        Issue issue = new Issue();
+    public Optional<IssueShowDto> show(Long issueId) {
+        Optional<Issue> issueOpt = issueRepository.findById(issueId);
+        Issue issue;
+        IssueShowDto issueShowDto = new IssueShowDto();
         if (issueOpt.isPresent()) {
-            issue =  issueOpt.get();
+            issue = issueOpt.get();
         } else {
-            throw new EntityNotFoundException("Issue not found");
+            return Optional.empty();
         }
+        issueShowDto.setId(issue.getId());
         issueShowDto.setTitle(issue.getTitle());
         issueShowDto.setDescription(issue.getDescription());
         AccountShowDto assignee = new AccountShowDto();
@@ -72,7 +74,7 @@ public class IssueService {
         issueShowDto.setAuthor(author);
         issueShowDto.setProject(issue.getProject());
         issueShowDto.setCurrentStatus(issue.getCurrentStatus());
-        return issueShowDto;
+        return Optional.of(issueShowDto);
     }
 
     public IssueDeleteByIssueDto deleteByIssue(IssueDeleteByIssueDto issueDeleteByIssueDto) {

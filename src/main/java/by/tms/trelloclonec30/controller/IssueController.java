@@ -1,5 +1,6 @@
 package by.tms.trelloclonec30.controller;
 
+import by.tms.trelloclonec30.dto.MessageErrorDto;
 import by.tms.trelloclonec30.dto.issue.IssueCreateDto;
 import by.tms.trelloclonec30.dto.issue.IssueDeleteByIssueDto;
 import by.tms.trelloclonec30.dto.issue.IssueShowDto;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/issue")
@@ -25,11 +28,15 @@ public class IssueController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-//    @PostMapping("/show")
-//    public ResponseEntity<IssueShowDto> create(@RequestBody IssueShowDto issueShowDto) {
-//        var show = issueService.show(issueShowDto);
-//        return new ResponseEntity<>(show, HttpStatus.OK);
-//    }
+    @GetMapping("/{issueId}")
+    public ResponseEntity<?> show(@PathVariable("issueId") Long issueId) {
+        Optional<IssueShowDto> showOpt = issueService.show(issueId);  // todo поменять с обработкой Optional
+        if (showOpt.isEmpty()) {
+            MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Issue not found");
+            return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(showOpt.get(), HttpStatus.OK);
+    }
 //
 //    @DeleteMapping("/by-issue")
 //    public ResponseEntity<IssueDeleteByIssueDto> delete(@RequestBody IssueDeleteByIssueDto issueDeleteByIssueDto) {

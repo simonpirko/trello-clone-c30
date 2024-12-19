@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class IssueShowDto {
-    private String id;
+    private Long id;
     private String title;
     private String description;
     private AccountShowDto author;
@@ -18,7 +18,7 @@ public class IssueShowDto {
     @Override
     public String toString() {
         return "IssueShowDto{" +
-                "id='" + id + "', " +
+                "id=" + id + ", " +
                 "title='" + title + "', " +
                 "description='" + description + "', " +
                 "currentStatus='" + currentStatus + "', " +
