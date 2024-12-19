@@ -1,7 +1,8 @@
 package by.tms.trelloclonec30.service;
 
-import by.tms.trelloclonec30.dto.ProjectCreateDto;
-import by.tms.trelloclonec30.dto.ProjectResponseDto;
+import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
+import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
+import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
 import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.entity.Workspace;
 import by.tms.trelloclonec30.repository.ProjectRepository;
@@ -48,5 +49,19 @@ public class ProjectService {
         projectResponseDto.setProjectDescription(project.getDescription());
         projectResponseDto.setWorkspaceId(projectCreateDto.getId_workspace());
         return projectResponseDto;
+    }
+
+    public Optional<ProjectIssuesDto> getProjectById(Long projectId) {
+        Optional<Project> projectOpt = projectRepository.findById(projectId);
+        if (projectOpt.isPresent()) {
+            Project project = projectOpt.get();
+        } else {
+            return Optional.empty();
+        }
+
+
+        ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
+
+        return projectIssuesDto;
     }
 }
