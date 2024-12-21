@@ -16,6 +16,6 @@ public class ExceptionController {
         }
         @ExceptionHandler(IllegalAccessException.class)
     public ResponseEntity<?> handleIllegalAccessException(IllegalAccessException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);пше
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
 }
