@@ -1,13 +1,10 @@
 package by.tms.trelloclonec30.entity;
 
-import org.springframework.security.core.GrantedAuthority;
 
-public enum Role implements GrantedAuthority {
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
-    ROLE_USER, USER_ADMIN;
+public enum Role {
+    AUTHOR_WORKSPACE, AUTHOR_ISSUE, PROJECT_LEADER, ASSIGNED_TO_TASK, PROJECT_MEMBER;
 
-    @Override
-    public String getAuthority() {
-        return name();
-    }
 }

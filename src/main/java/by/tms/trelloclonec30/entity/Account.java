@@ -3,6 +3,9 @@ package by.tms.trelloclonec30.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +21,6 @@ public class Account {
     private String username;
     @Column(nullable = false)
     private String password;
-/*    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<Role> authorities = new HashSet<>();*/
+
 
 }
