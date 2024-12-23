@@ -1,7 +1,9 @@
 package by.tms.trelloclonec30.service;
 
-import by.tms.trelloclonec30.dto.ProjectCreateDto;
-import by.tms.trelloclonec30.dto.ProjectResponseDto;
+import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
+import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
+import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
+import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
 import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.entity.Workspace;
 import by.tms.trelloclonec30.repository.ProjectRepository;
@@ -15,11 +17,18 @@ import java.util.Optional;
 
 @Service
 public class ProjectService {
+    private final ProjectRepository projectRepository;
+    private final WorkspaceRepository workspaceRepository;
+    private final IssueService issueService;
 
     @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private WorkspaceRepository workspaceRepository;
+    public ProjectService(ProjectRepository projectRepository,
+                          WorkspaceRepository workspaceRepository,
+                          IssueService issueService) {
+        this.projectRepository = projectRepository;
+        this.workspaceRepository = workspaceRepository;
+        this.issueService = issueService;
+    }
 
     public List<ProjectResponseDto> getAllProjectsByWorkspace(Long workspaceId) {
         List<Project> projects = projectRepository.findAllByWorkspaceId(workspaceId);
@@ -48,5 +57,21 @@ public class ProjectService {
         projectResponseDto.setProjectDescription(project.getDescription());
         projectResponseDto.setWorkspaceId(projectCreateDto.getId_workspace());
         return projectResponseDto;
+    }
+
+    public Optional<ProjectIssuesDto> getIssuesByProject(Long projectId) {
+        Optional<Project> projectOpt = projectRepository.findById(projectId);
+        Project project;
+        if (projectOpt.isPresent()) {
+            project = projectOpt.get();
+        } else {
+            return Optional.empty();
+        }
+        ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
+        projectIssuesDto.setId(project.getId());
+        projectIssuesDto.setName(project.getName());
+        projectIssuesDto.setDescription(project.getDescription());
+        projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
+        return Optional.of(projectIssuesDto);
     }
 }
