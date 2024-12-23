@@ -35,7 +35,6 @@ public class TeamService {
         team = teamRepository.save(team);
         TeamDto teamDto = convertTeamToTeamDto(team);
         return teamDto;
-      
     }
 
     public List<TeamDto> getAllTeams(Long workspaceId) {
@@ -47,7 +46,7 @@ public class TeamService {
         return teamDtos;
     }
   
-    private TeamDto convertTeamToTeamDto(Team team) {
+    public TeamDto convertTeamToTeamDto(Team team) {
         TeamDto teamDto = new TeamDto();
         teamDto.setTeamName(team.getName());
         teamDto.setId(team.getId());

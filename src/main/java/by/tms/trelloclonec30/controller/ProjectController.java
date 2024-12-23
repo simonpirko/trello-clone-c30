@@ -1,10 +1,15 @@
 package by.tms.trelloclonec30.controller;
 
 import by.tms.trelloclonec30.dto.MessageErrorDto;
+import by.tms.trelloclonec30.dto.WorkspaceResponseDto;
+import by.tms.trelloclonec30.entity.Account;
+import by.tms.trelloclonec30.entity.Project;
+import by.tms.trelloclonec30.repository.ProjectRepository;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
 import by.tms.trelloclonec30.service.ProjectService;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +39,15 @@ public class ProjectController {
         }
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
-
+  
     @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectResponseDto> getProjectById(@PathVariable("projectId") Long projectId, Authentication authentication) {
+        ProjectResponseDto projectResponseDto = projectService.findById(projectId);
+        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
+
+    }
+  
+    @GetMapping("/{projectId}/issues")
     public ResponseEntity<?> getIssuesByProjects(@PathVariable("projectId") Long projectId) {
         Optional<ProjectIssuesDto> projectIssuesOpt = projectService.getIssuesByProject(projectId);
         if (projectIssuesOpt.isEmpty()) {
