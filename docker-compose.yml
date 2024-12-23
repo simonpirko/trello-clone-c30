@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    image: tms/trello-clone
+    build:
+      context: .
+    restart: on-failure
+    container_name: trello-clone
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    restart: on-failure
+    container_name: postgres-db
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
