@@ -33,7 +33,7 @@ public class WorkspaceService {
     public WorkspaceResponseDto createWorkspace(WorkspaceCreateDto workspaceDto, Account account) {
         Workspace workspace = new Workspace();
         workspace.setName(workspaceDto.getName());
-        workspace.setAuthor(account);
+        //workspace.setAuthor(account);
         workspace = workspaceRepository.save(workspace);
         WorkspaceResponseDto workspaceResponseDto = new WorkspaceResponseDto();
         workspaceResponseDto.setIdWorkspace(workspace.getId());
@@ -42,7 +42,7 @@ public class WorkspaceService {
         return workspaceResponseDto;
     }
 
-    public List<WorkspaceResponseDto> getAllWorkspacesByAccount(Account account) {
+  /*  public List<WorkspaceResponseDto> getAllWorkspacesByAccount(Account account) {
         List<Workspace> workspaces = workspaceRepository.findAllByAuthor_Id(account.getId());
         List<WorkspaceResponseDto> workspaceResponseDtos = new ArrayList<>();
         for (Workspace workspace : workspaces) {
@@ -54,6 +54,6 @@ public class WorkspaceService {
             workspaceResponseDtos.add(workspaceResponseDto);
         }
         return workspaceResponseDtos;
-    }
+    }*/
 
 }

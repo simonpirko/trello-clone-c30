@@ -39,19 +39,19 @@ public class WorkspaceController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/show")
+/*    @GetMapping("/show")
     public ResponseEntity<?> getWorkspace(Authentication authentication) {
         String username = authentication.getName();
         Account account = accountService.checkAccount(username);
         if (account == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            List<WorkspaceResponseDto> workspaceResponseDtos = workspaceService.getAllWorkspacesByAccount(account);
+           // List<WorkspaceResponseDto> workspaceResponseDtos = workspaceService.getAllWorkspacesByAccount(account);
             if (workspaceResponseDtos.isEmpty()) {
                 MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Workspace not found");
                 return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(workspaceResponseDtos, HttpStatus.OK);
         }
-    }
+    }*/
 }

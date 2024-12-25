@@ -1,5 +1,4 @@
 package by.tms.trelloclonec30.service;
-
 import by.tms.trelloclonec30.dto.TeamDto;
 import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
@@ -23,14 +22,16 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final WorkspaceRepository workspaceRepository;
     private final IssueService issueService;
+    private final TeamService teamService;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository,
                           WorkspaceRepository workspaceRepository,
-                          IssueService issueService) {
+                          IssueService issueService, TeamService teamService) {
         this.projectRepository = projectRepository;
         this.workspaceRepository = workspaceRepository;
         this.issueService = issueService;
+        this.teamService = teamService;
     }
 
     public List<ProjectResponseDto> getAllProjectsByWorkspace(Long workspaceId) {
