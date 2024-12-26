@@ -14,8 +14,8 @@ public class ExceptionController {
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
-        @ExceptionHandler(IllegalAccessException.class)
-    public ResponseEntity<?> handleIllegalAccessException(IllegalAccessException ex) {
+        @ExceptionHandler(IllegalAccessError.class)
+    public ResponseEntity<?> handleIllegalErrorException(IllegalAccessError ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
 }
