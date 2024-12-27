@@ -1,21 +1,18 @@
 package by.tms.trelloclonec30.service;
+
 import by.tms.trelloclonec30.dto.TeamDto;
-import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
-import by.tms.trelloclonec30.entity.Project;
-import by.tms.trelloclonec30.entity.Team;
-import by.tms.trelloclonec30.entity.Workspace;
+import by.tms.trelloclonec30.entity.*;
 import by.tms.trelloclonec30.repository.ProjectRepository;
+import by.tms.trelloclonec30.repository.RolesRepository;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProjectService {
@@ -34,6 +31,9 @@ public class ProjectService {
         this.teamService = teamService;
     }
 
+    @Autowired
+    private RolesRepository rolesRepository;
+
     public List<ProjectResponseDto> getAllProjectsByWorkspace(Long workspaceId) {
         List<Project> projects = projectRepository.findAllByWorkspaceId(workspaceId);
         List<ProjectResponseDto> projectResponseDtos = new ArrayList<>();
@@ -48,12 +48,21 @@ public class ProjectService {
         return projectResponseDtos;
     }
 
-    public ProjectResponseDto createProject(ProjectCreateDto projectCreateDto) {
+    public ProjectResponseDto createProject(ProjectCreateDto projectCreateDto,Account account) {
         Project project = new Project();
         project.setName(projectCreateDto.getName());
         project.setDescription(projectCreateDto.getDescription());
         Optional<Workspace> workspace = workspaceRepository.findById(projectCreateDto.getId_workspace());
         workspace.ifPresent(project::setWorkspace);
+
+        Roles role = new Roles();
+        role.setAccount(account);
+        role.setRole(Role.PROJECT_LEADER);
+        role = rolesRepository.save(role);
+        Set<Roles> rolesSet = new HashSet<>();
+        rolesSet.add(role);
+        project.setRoles(rolesSet);
+
         projectRepository.save(project);
         ProjectResponseDto projectResponseDto = new ProjectResponseDto();
         projectResponseDto.setProjectId(project.getId());
@@ -84,19 +93,35 @@ public class ProjectService {
         }
     }
 
-    public Optional<ProjectIssuesDto> getIssuesByProject(Long projectId) {
-        Optional<Project> projectOpt = projectRepository.findById(projectId);
-        Project project;
-        if (projectOpt.isPresent()) {
-            project = projectOpt.get();
-        } else {
-            return Optional.empty();
+    public Optional<ProjectIssuesDto> getIssuesByProject(Long projectId,Account account) {
+        if(checkRoles(projectId, account)){
+
+            Optional<Project> projectOpt = projectRepository.findById(projectId);
+            Project project;
+            if (projectOpt.isPresent()) {
+                project = projectOpt.get();
+            } else {
+                return Optional.empty();
+            }
+            ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
+            projectIssuesDto.setId(project.getId());
+            projectIssuesDto.setName(project.getName());
+            projectIssuesDto.setDescription(project.getDescription());
+            projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
+            return Optional.of(projectIssuesDto);
+
+        }else{
+            throw new IllegalAccessError("Not allowed to show issues");
         }
-        ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
-        projectIssuesDto.setId(project.getId());
-        projectIssuesDto.setName(project.getName());
-        projectIssuesDto.setDescription(project.getDescription());
-        projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
-        return Optional.of(projectIssuesDto);
+    }
+
+    private boolean checkRoles(Long projectId, Account account) {
+        Project project = projectRepository.findById(projectId).get();
+        Set<Roles> rolesSet = project.getRoles();
+        Roles roles = rolesSet.iterator().next();
+        if (roles.getAccount().equals(account)) {
+            return true;
+        }
+        return false;
     }
 }
