@@ -2,6 +2,7 @@ package by.tms.trelloclonec30.controller;
 
 import by.tms.trelloclonec30.dto.MessageErrorDto;
 import by.tms.trelloclonec30.dto.WorkspaceResponseDto;
+import by.tms.trelloclonec30.dto.project.InviteTeamDTO;
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.repository.ProjectRepository;
@@ -39,14 +40,14 @@ public class ProjectController {
         }
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
-  
+
     @GetMapping("/{projectId}")
     public ResponseEntity<ProjectResponseDto> getProjectById(@PathVariable("projectId") Long projectId, Authentication authentication) {
         ProjectResponseDto projectResponseDto = projectService.findById(projectId);
         return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
 
     }
-  
+
     @GetMapping("/{projectId}/issues")
     public ResponseEntity<?> getIssuesByProjects(@PathVariable("projectId") Long projectId) {
         Optional<ProjectIssuesDto> projectIssuesOpt = projectService.getIssuesByProject(projectId);
@@ -55,5 +56,15 @@ public class ProjectController {
             return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(projectIssuesOpt.get(), HttpStatus.OK);
+    }
+
+    @PostMapping("/invite")
+    public ResponseEntity<?> inviteTeamInProjects(@RequestBody InviteTeamDTO inviteTeamDTO) {
+
+        if(projectService.inviteTeam(inviteTeamDTO.getIdProject(), inviteTeamDTO.getIdTeam())){
+            return new ResponseEntity<>(inviteTeamDTO,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(inviteTeamDTO, HttpStatus.BAD_REQUEST);
+        }
     }
 }

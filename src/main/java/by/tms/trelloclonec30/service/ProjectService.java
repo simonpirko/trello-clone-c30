@@ -2,6 +2,7 @@ package by.tms.trelloclonec30.service;
 
 import by.tms.trelloclonec30.dto.TeamDto;
 import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
+import by.tms.trelloclonec30.dto.project.InviteTeamDTO;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
@@ -9,6 +10,8 @@ import by.tms.trelloclonec30.entity.Project;
 import by.tms.trelloclonec30.entity.Team;
 import by.tms.trelloclonec30.entity.Workspace;
 import by.tms.trelloclonec30.repository.ProjectRepository;
+
+import by.tms.trelloclonec30.repository.TeamRepository;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,10 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final WorkspaceRepository workspaceRepository;
     private final IssueService issueService;
+    @Autowired
+    TeamService teamService;
+    @Autowired
+    TeamRepository teamRepository;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository,
@@ -73,12 +80,11 @@ public class ProjectService {
             projectResponseDto.setWorkspaceId(project.getWorkspace().getId());
             List<TeamDto> teamDtos = new ArrayList<>();
             for (Team team : project.getTeams()) {
-               teamDtos.add(teamService.convertTeamToTeamDto(team));
+                teamDtos.add(teamService.convertTeamToTeamDto(team));
             }
             projectResponseDto.setTeams(teamDtos);
             return projectResponseDto;
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Project not found");
         }
     }
@@ -97,5 +103,22 @@ public class ProjectService {
         projectIssuesDto.setDescription(project.getDescription());
         projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
         return Optional.of(projectIssuesDto);
+    }
+
+    public Boolean inviteTeam(Long projectId, Long teamId) {
+        Optional<Project> projectOpt = projectRepository.findById(projectId);
+        Optional<Team> teamOpt = teamRepository.findById(teamId);
+       if (projectOpt.isPresent() && teamOpt.isPresent()) {
+          Project project = projectOpt.get();
+          Team team = teamOpt.get();
+          if(project.getTeams().contains(team)) {
+              throw new EntityNotFoundException("Team is already in this Project");
+          }
+          project.getTeams().add(team);
+          projectRepository.save(project);
+          return true;
+       }else {
+           throw new EntityNotFoundException("Team or Project not found");
+       }
     }
 }
