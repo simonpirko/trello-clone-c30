@@ -1,4 +1,4 @@
-package by.tms.trelloclonec30.dto;
+package by.tms.trelloclonec30.dto.workspace;
 
 import lombok.Data;
 import lombok.ToString;

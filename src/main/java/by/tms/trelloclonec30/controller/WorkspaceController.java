@@ -2,8 +2,8 @@ package by.tms.trelloclonec30.controller;
 
 
 import by.tms.trelloclonec30.dto.MessageErrorDto;
-import by.tms.trelloclonec30.dto.WorkspaceCreateDto;
-import by.tms.trelloclonec30.dto.WorkspaceResponseDto;
+import by.tms.trelloclonec30.dto.workspace.WorkspaceCreateDto;
+import by.tms.trelloclonec30.dto.workspace.WorkspaceResponseDto;
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Workspace;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;

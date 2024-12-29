@@ -1,7 +1,7 @@
 package by.tms.trelloclonec30.service;
 
-import by.tms.trelloclonec30.dto.WorkspaceCreateDto;
-import by.tms.trelloclonec30.dto.WorkspaceResponseDto;
+import by.tms.trelloclonec30.dto.workspace.WorkspaceCreateDto;
+import by.tms.trelloclonec30.dto.workspace.WorkspaceResponseDto;
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Role;
 import by.tms.trelloclonec30.entity.Roles;
@@ -11,7 +11,6 @@ import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -98,7 +97,7 @@ public class WorkspaceService {
         }
     }
 
-    private boolean checkRoles(Workspace workspace, Account account) {
+    public boolean checkRoles(Workspace workspace, Account account) {
         Set<Roles> rolesSet = workspace.getRoles();
         Roles roles = rolesSet.iterator().next();
         return roles.getAccount().equals(account);
