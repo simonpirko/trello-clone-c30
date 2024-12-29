@@ -112,6 +112,20 @@ public class ProjectService {
         return Optional.of(projectIssuesDto);
     }
 
+    public void deleteProject(Long projectId, Account account) {
+        Optional<Project> projectOptional = projectRepository.findById(projectId);
+        if (projectOptional.isPresent()) {
+            Project project = projectOptional.get();
+            if (checkRoles(project, account)) {
+                projectRepository.delete(project);
+            } else {
+                throw new IllegalAccessError("Not allowed to delete project");
+            }
+        } else {
+            throw new EntityNotFoundException("Project with id " + projectId + " not found");
+        }
+    }
+
     public boolean checkRoles(Project project, Account account) {
         Optional<Workspace> workspaceOptional = workspaceRepository.findById(project.getWorkspace().getId());
         if (workspaceOptional.isPresent()) {

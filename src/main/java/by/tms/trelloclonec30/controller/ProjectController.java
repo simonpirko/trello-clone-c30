@@ -51,6 +51,14 @@ public class ProjectController {
         return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
 
     }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<?> deleteProject(@PathVariable("projectId") Long projectId, Authentication authentication) {
+        String username = authentication.getName();
+        Account account = accountService.checkAccount(username);
+        projectService.deleteProject(projectId, account);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
   
     @GetMapping("/{projectId}/issues")
     public ResponseEntity<?> getIssuesByProjects(@PathVariable("projectId") Long projectId) {
