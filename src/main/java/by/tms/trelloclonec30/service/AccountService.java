@@ -2,6 +2,7 @@ package by.tms.trelloclonec30.service;
 
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.repository.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,7 +30,11 @@ public class AccountService implements UserDetailsService {
 
     public Account checkAccount(String username) {
         Optional<Account> account = accountRepository.findByUsername(username);
-        return account.orElse(null);
+        if (account.isPresent()) {
+            return account.get();
+        } else {
+            throw new EntityNotFoundException("Account not found");
+        }
     }
 
     @Override
