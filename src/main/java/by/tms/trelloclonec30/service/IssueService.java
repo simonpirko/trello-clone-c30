@@ -78,7 +78,7 @@ public class IssueService {
 //        AccountShowDto author = new AccountShowDto();
 //        author.setId(issue.getAuthor().getId());
 //        author.setUsername(issue.getAuthor().getUsername());
-//        issueShowDto.setAuthor(author);
+//      issueShowDto.setAuthor(author);
 //        issueShowDto.setProject(issue.getProject());
 //        issueShowDto.setCurrentStatus(issue.getCurrentStatus());
         return Optional.of(getIssueShowDto(issue));

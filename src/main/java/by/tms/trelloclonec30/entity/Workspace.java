@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -19,8 +21,6 @@ public class Workspace {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "id_author")
-    private Account author;
-
+    @ManyToMany
+    private Set<Roles> roles = new HashSet<>();
 }

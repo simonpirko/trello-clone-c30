@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @ToString
@@ -26,4 +29,7 @@ public class Issue {
     private Project project;
     @Column(nullable = false)
     private Status currentStatus;
+
+    @ManyToMany
+    private Set<Roles> roles = new HashSet<>();
 }
