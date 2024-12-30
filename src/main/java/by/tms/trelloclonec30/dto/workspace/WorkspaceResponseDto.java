@@ -1,5 +1,6 @@
-package by.tms.trelloclonec30.dto;
+package by.tms.trelloclonec30.dto.workspace;
 
+import by.tms.trelloclonec30.dto.TeamDto;
 import lombok.Data;
 import lombok.ToString;
 

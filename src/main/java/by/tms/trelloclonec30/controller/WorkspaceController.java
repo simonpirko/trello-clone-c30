@@ -1,12 +1,11 @@
 package by.tms.trelloclonec30.controller;
 
 
-import by.tms.trelloclonec30.dto.WorkspaceCreateDto;
-import by.tms.trelloclonec30.dto.WorkspaceResponseDto;
+import by.tms.trelloclonec30.dto.MessageErrorDto;
+import by.tms.trelloclonec30.dto.workspace.WorkspaceCreateDto;
+import by.tms.trelloclonec30.dto.workspace.WorkspaceResponseDto;
 import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.entity.Workspace;
-import by.tms.trelloclonec30.repository.AccountRepository;
-import by.tms.trelloclonec30.dto.MessageErrorDto;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import by.tms.trelloclonec30.service.AccountService;
 import by.tms.trelloclonec30.service.WorkspaceService;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/workspace")
@@ -37,52 +35,54 @@ public class WorkspaceController {
     @Autowired
     private AccountService accountService;
 
-@Operation(summary = "creating a workspace")
-    @PostMapping("/create")
+    @Operation(summary = "creating a workspace")
+    @PostMapping
     public ResponseEntity<WorkspaceResponseDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceDto, Authentication authentication) {
         String username = authentication.getName();
         Account account = accountService.checkAccount(username);
-        if (account != null) {
-            WorkspaceResponseDto workspaceResponseDto = workspaceService.createWorkspace(workspaceDto, account);
-            return new ResponseEntity<>(workspaceResponseDto, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        WorkspaceResponseDto workspaceResponseDto = workspaceService.createWorkspace(workspaceDto, account);
+        return new ResponseEntity<>(workspaceResponseDto, HttpStatus.CREATED);
     }
 
     @ApiResponse(responseCode = "404", description = "Workspace not found")
     @ApiResponse(responseCode = "403", description = "The current user does not have permission to edit the specified workspace")
     @Operation(summary = "Editing the workspace by id")
-    @PatchMapping("/edit/{id}")
-    public ResponseEntity<WorkspaceResponseDto> editWorkspace(@PathVariable("id") Long id,@RequestBody WorkspaceCreateDto workspaceDto, Authentication authentication){
+    @PatchMapping("/{id}")
+    public ResponseEntity<WorkspaceResponseDto> editWorkspace(@PathVariable("id") Long id, @RequestBody WorkspaceCreateDto workspaceDto, Authentication authentication){
         String username = authentication.getName();
         Account account = accountService.checkAccount(username);
         Optional<Workspace> workspaceOptional= workspaceRepository.findById(id);
-        Workspace workspace = new Workspace();
+        Workspace workspace;
         if (workspaceOptional.isPresent()) {
-          workspace = workspaceOptional.get();
-          workspace.setName(workspaceDto.getName());
+            workspace = workspaceOptional.get();
+            workspace.setName(workspaceDto.getName());
         }
         else {
             throw new EntityNotFoundException("Workspace not found");
         }
- WorkspaceResponseDto workspaceResponseDto = workspaceService.edit(workspace,account);
+        WorkspaceResponseDto workspaceResponseDto = workspaceService.edit(workspace,account);
         return ResponseEntity.ok(workspaceResponseDto);
      }
 
 
-/*    @GetMapping("/show")
+    @GetMapping
     public ResponseEntity<?> getWorkspace(Authentication authentication) {
         String username = authentication.getName();
         Account account = accountService.checkAccount(username);
-        if (account == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-           // List<WorkspaceResponseDto> workspaceResponseDtos = workspaceService.getAllWorkspacesByAccount(account);
-            if (workspaceResponseDtos.isEmpty()) {
-                MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Workspace not found");
-                return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(workspaceResponseDtos, HttpStatus.OK);
+
+        List<WorkspaceResponseDto> workspaceResponseDtos = workspaceService.getAllWorkspacesByAccount(account);
+        if (workspaceResponseDtos.isEmpty()) {
+            MessageErrorDto messageError = new MessageErrorDto(HttpStatus.NOT_FOUND.value(), "Workspace not found");
+            return new ResponseEntity<>(messageError, HttpStatus.NOT_FOUND);
         }
-    }*/
+        return new ResponseEntity<>(workspaceResponseDtos, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{worspaceId}")
+    public ResponseEntity<?> deleteWorkspace(@PathVariable("worspaceId") Long workspaceId, Authentication authentication) {
+        String username = authentication.getName();
+        Account account = accountService.checkAccount(username);
+        workspaceService.deleteWorkspaceById(workspaceId, account);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -1,12 +1,10 @@
 package by.tms.trelloclonec30.controller;
 
 import by.tms.trelloclonec30.dto.MessageErrorDto;
-import by.tms.trelloclonec30.dto.WorkspaceResponseDto;
-import by.tms.trelloclonec30.dto.project.InviteTeamDTO;
-import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
+import by.tms.trelloclonec30.entity.Account;
 import by.tms.trelloclonec30.service.AccountService;
 import by.tms.trelloclonec30.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +29,15 @@ public class ProjectController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AccountService accountService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ProjectResponseDto> createProject(@RequestBody ProjectCreateDto projectCreateDto,Authentication authentication) {
-
+    @PostMapping
+    public ResponseEntity<ProjectResponseDto> createProject(@RequestBody ProjectCreateDto projectCreateDto,
+                                                            Authentication authentication) {
         String username = authentication.getName();
         Account account = accountService.checkAccount(username);
-
-        return new ResponseEntity<>(projectService.createProject(projectCreateDto,account), HttpStatus.CREATED);
+        return new ResponseEntity<>(projectService.createProject(projectCreateDto, account), HttpStatus.CREATED);
     }
 
     @GetMapping("/show/{workspaceId}")
@@ -57,6 +56,14 @@ public class ProjectController {
         Account account = accountService.checkAccount(username);
         ProjectResponseDto projectResponseDto = projectService.findById(projectId);
         return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<?> deleteProject(@PathVariable("projectId") Long projectId, Authentication authentication) {
+        String username = authentication.getName();
+        Account account = accountService.checkAccount(username);
+        projectService.deleteProject(projectId, account);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{projectId}/issues")
