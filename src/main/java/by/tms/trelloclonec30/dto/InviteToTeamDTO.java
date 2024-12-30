@@ -9,5 +9,4 @@ import java.util.List;
 @ToString
 public class InviteToTeamDTO {
     private String AccountName;
-    private Long idTeam;
 }

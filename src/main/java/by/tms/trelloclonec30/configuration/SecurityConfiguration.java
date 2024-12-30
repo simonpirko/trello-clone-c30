@@ -46,6 +46,8 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(c ->
                         c.requestMatchers(HttpMethod.POST, "/account", "/auth/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**",
+                                        "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(c ->

@@ -1,21 +1,16 @@
 package by.tms.trelloclonec30.service;
 import by.tms.trelloclonec30.dto.TeamDto;
-import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
-import by.tms.trelloclonec30.entity.Project;
-import by.tms.trelloclonec30.entity.Team;
-import by.tms.trelloclonec30.entity.Workspace;
+import by.tms.trelloclonec30.entity.*;
 import by.tms.trelloclonec30.repository.ProjectRepository;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProjectService {
@@ -74,7 +69,7 @@ public class ProjectService {
             projectResponseDto.setWorkspaceId(project.getWorkspace().getId());
             List<TeamDto> teamDtos = new ArrayList<>();
             for (Team team : project.getTeams()) {
-               teamDtos.add(teamService.convertTeamToTeamDto(team));
+                teamDtos.add(teamService.convertTeamToTeamDto(team));
             }
             projectResponseDto.setTeams(teamDtos);
             return projectResponseDto;

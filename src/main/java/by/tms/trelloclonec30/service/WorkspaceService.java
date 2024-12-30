@@ -85,9 +85,6 @@ public class WorkspaceService {
 private boolean checkRoles(Workspace workspace, Account account) {
     Set<Roles> rolesSet = workspace.getRoles();
    Roles roles = rolesSet.iterator().next();
-    if (roles.getAccount().equals(account)) {
-        return true;
-    }
-    return false;
+    return roles.getAccount().equals(account);
 }
 }
