@@ -10,6 +10,8 @@ import by.tms.trelloclonec30.dto.MessageErrorDto;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import by.tms.trelloclonec30.service.AccountService;
 import by.tms.trelloclonec30.service.WorkspaceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,7 @@ public class WorkspaceController {
     @Autowired
     private AccountService accountService;
 
-
+@Operation(summary = "creating a workspace")
     @PostMapping("/create")
     public ResponseEntity<WorkspaceResponseDto> createWorkspace(@RequestBody WorkspaceCreateDto workspaceDto, Authentication authentication) {
         String username = authentication.getName();
@@ -46,6 +48,10 @@ public class WorkspaceController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @ApiResponse(responseCode = "404", description = "Workspace not found")
+    @ApiResponse(responseCode = "403", description = "The current user does not have permission to edit the specified workspace")
+    @Operation(summary = "Editing the workspace by id")
     @PatchMapping("/edit/{id}")
     public ResponseEntity<WorkspaceResponseDto> editWorkspace(@PathVariable("id") Long id,@RequestBody WorkspaceCreateDto workspaceDto, Authentication authentication){
         String username = authentication.getName();

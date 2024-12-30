@@ -60,8 +60,8 @@ public class TeamService {
         return teamDto;
     }
   
-    public TeamDto invite(InviteToTeamDTO inviteToTeamDTO) {
-        Team team = teamRepository.findById(inviteToTeamDTO.getIdTeam()).get();
+    public TeamDto invite(InviteToTeamDTO inviteToTeamDTO, Long id) {
+        Team team = teamRepository.findById(id).get();
         Account account = accountRepository.findByUsername(inviteToTeamDTO.getAccountName()).get();
         team.getAccounts().add(account);
         teamRepository.save(team);

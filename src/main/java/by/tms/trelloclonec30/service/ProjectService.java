@@ -83,7 +83,7 @@ public class ProjectService {
             projectResponseDto.setWorkspaceId(project.getWorkspace().getId());
             List<TeamDto> teamDtos = new ArrayList<>();
             for (Team team : project.getTeams()) {
-               teamDtos.add(teamService.convertTeamToTeamDto(team));
+                teamDtos.add(teamService.convertTeamToTeamDto(team));
             }
             projectResponseDto.setTeams(teamDtos);
             return projectResponseDto;

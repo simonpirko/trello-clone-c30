@@ -10,6 +10,7 @@ import by.tms.trelloclonec30.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -22,6 +23,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AccountService accountService;
+
     @Autowired
     private AccountService accountService;
 
@@ -45,13 +49,15 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
   
-    @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectResponseDto> getProjectById(@PathVariable("projectId") Long projectId, Authentication authentication) {
-        ProjectResponseDto projectResponseDto = projectService.findById(projectId);
+   @GetMapping("/{projectId}")
+   public ResponseEntity<ProjectResponseDto> getProjectById(@PathVariable("projectId") Long projectId, Authentication authentication) {
+        String username = authentication.getName();
+        Account account = accountService.checkAccount(username);
+       ProjectResponseDto projectResponseDto = projectService.findById(projectId);
         return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
 
     }
-  
+
     @GetMapping("/{projectId}/issues")
     public ResponseEntity<?> getIssuesByProjects(@PathVariable("projectId") Long projectId,Authentication authentication) {
 
@@ -65,4 +71,5 @@ public class ProjectController {
         }
         return new ResponseEntity<>(projectIssuesOpt.get(), HttpStatus.OK);
     }
+
 }
