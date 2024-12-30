@@ -102,5 +102,4 @@ public class WorkspaceService {
         Roles roles = rolesSet.iterator().next();
         return roles.getAccount().equals(account);
     }
-
 }

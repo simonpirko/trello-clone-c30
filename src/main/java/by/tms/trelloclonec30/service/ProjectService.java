@@ -1,11 +1,14 @@
 package by.tms.trelloclonec30.service;
+
 import by.tms.trelloclonec30.dto.TeamDto;
 import by.tms.trelloclonec30.dto.issue.IssueByProjectDto;
+import by.tms.trelloclonec30.dto.project.InviteTeamDTO;
 import by.tms.trelloclonec30.dto.project.ProjectCreateDto;
 import by.tms.trelloclonec30.dto.project.ProjectIssuesDto;
 import by.tms.trelloclonec30.dto.project.ProjectResponseDto;
 import by.tms.trelloclonec30.entity.*;
 import by.tms.trelloclonec30.repository.ProjectRepository;
+import by.tms.trelloclonec30.repository.TeamRepository;
 import by.tms.trelloclonec30.repository.WorkspaceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -24,6 +27,9 @@ public class ProjectService {
     private final IssueService issueService;
     private final TeamService teamService;
     private final WorkspaceService workspaceService;
+    
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     public ProjectService(ProjectRepository projectRepository,
@@ -35,6 +41,9 @@ public class ProjectService {
         this.teamService = teamService;
         this.workspaceService = workspaceService;
     }
+
+    @Autowired
+    private RolesRepository rolesRepository;
 
     public List<ProjectResponseDto> getAllProjectsByWorkspace(Long workspaceId) {
         List<Project> projects = projectRepository.findAllByWorkspaceId(workspaceId);
@@ -86,30 +95,62 @@ public class ProjectService {
             projectResponseDto.setWorkspaceId(project.getWorkspace().getId());
             List<TeamDto> teamDtos = new ArrayList<>();
             for (Team team : project.getTeams()) {
-               teamDtos.add(teamService.convertTeamToTeamDto(team));
+                teamDtos.add(teamService.convertTeamToTeamDto(team));
             }
             projectResponseDto.setTeams(teamDtos);
             return projectResponseDto;
-        }
-        else {
+        } else {
             throw new EntityNotFoundException("Project not found");
         }
     }
 
-    public Optional<ProjectIssuesDto> getIssuesByProject(Long projectId) {
-        Optional<Project> projectOpt = projectRepository.findById(projectId);
-        Project project;
-        if (projectOpt.isPresent()) {
-            project = projectOpt.get();
-        } else {
-            return Optional.empty();
+    public Optional<ProjectIssuesDto> getIssuesByProject(Long projectId,Account account) {
+        if(checkRoles(projectId, account)){
+
+            Optional<Project> projectOpt = projectRepository.findById(projectId);
+            Project project;
+            if (projectOpt.isPresent()) {
+                project = projectOpt.get();
+            } else {
+                return Optional.empty();
+            }
+            ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
+            projectIssuesDto.setId(project.getId());
+            projectIssuesDto.setName(project.getName());
+            projectIssuesDto.setDescription(project.getDescription());
+            projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
+            return Optional.of(projectIssuesDto);
+
+        }else{
+            throw new IllegalAccessError("Not allowed to show issues");
         }
-        ProjectIssuesDto projectIssuesDto = new ProjectIssuesDto();
-        projectIssuesDto.setId(project.getId());
-        projectIssuesDto.setName(project.getName());
-        projectIssuesDto.setDescription(project.getDescription());
-        projectIssuesDto.setIssues(issueService.issuesByProject(project.getId()));
-        return Optional.of(projectIssuesDto);
+    }
+
+    private boolean checkRoles(Long projectId, Account account) {
+        Project project = projectRepository.findById(projectId).get();
+        Set<Roles> rolesSet = project.getRoles();
+        Roles roles = rolesSet.iterator().next();
+        if (roles.getAccount().equals(account)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean inviteTeam(Long projectId, Long teamId) {
+        Optional<Project> projectOpt = projectRepository.findById(projectId);
+        Optional<Team> teamOpt = teamRepository.findById(teamId);
+       if (projectOpt.isPresent() && teamOpt.isPresent()) {
+          Project project = projectOpt.get();
+          Team team = teamOpt.get();
+          if(project.getTeams().contains(team)) {
+              throw new EntityNotFoundException("Team is already in this Project");
+          }
+          project.getTeams().add(team);
+          projectRepository.save(project);
+          return true;
+       }else {
+           throw new EntityNotFoundException("Team or Project not found");
+       }
     }
 
     public void deleteProject(Long projectId, Account account) {

@@ -9,7 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Set;
 
 public interface RolesRepository extends JpaRepository<Roles, Long> {
-
-    Set<Roles> findAllByAccountAndRole(Account account, Role role);
-
+      Set<Roles> findAllByAccountAndRole(Account account, Role role);
 }
